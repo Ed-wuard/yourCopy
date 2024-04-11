@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourCopy | Copia tus frases, palabras y código con más eficiencia</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets//apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets//favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets//favicon-16x16.png">
+    <link rel="manifest" href="./assets/site.webmanifest">
+
+</head>
+<body style="font-family: 'Nunito', sans-serif;">
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Copiar Frases, Palabras y Código</h1>
+        <div class="input-group mb-3">
+            <textarea class="form-control" id="textArea" rows="5"></textarea>
+            <button class="btn btn-primary px-4" type="button" id="copyBtn"><i class="material-icons">content_copy</i></button>
+        </div>
+        <ul class="list-group" id="list">
+            <!-- Aquí se agregarán los elementos dinámicamente -->
+        </ul>
+    </div>
+
+    <!-- Toast de Bootstrap -->
+    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        <div id="copyToast" class="toast hide text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body d-flex align-items-center">
+                    <i class="material-icons me-2">done</i>
+                    Texto copiado al portapapeles
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script>
+        const textArea = document.getElementById('textArea');
+        const copyBtn = document.getElementById('copyBtn');
+        const list = document.getElementById('list');
+
+        textArea.addEventListener('contextmenu', async (e) => {
+            e.preventDefault(); // Evitar que se muestre el menú contextual predeterminado
+
+            try {
+                const clipboardContent = await navigator.clipboard.readText();
+                const startPosition = textArea.selectionStart;
+                const endPosition = textArea.selectionEnd;
+
+                textArea.value = textArea.value.substring(0, startPosition) + clipboardContent + textArea.value.substring(endPosition);
+
+                // Establecer la nueva posición del cursor después de pegar el contenido
+                textArea.selectionStart = startPosition + clipboardContent.length;
+                textArea.selectionEnd = startPosition + clipboardContent.length;
+            } catch (error) {
+                console.error('Error al acceder al portapapeles:', error);
+            }
+        });
+
+
+        function showToast() {
+            const toast = new bootstrap.Toast(document.getElementById('copyToast'));
+            toast.show();
+        }
+
+        function loadData() {
+            const storedData = JSON.parse(localStorage.getItem('listData')) || [];
+            storedData.forEach((text) => {
+                const li = createListItem(text);
+                list.appendChild(li);
+            });
+        }
+
+        function saveData() {
+            const listItems = Array.from(list.children).map((li) => li.textContent.trim().replace(/delete/i, ''));
+            localStorage.setItem('listData', JSON.stringify(listItems));
+        }
+
+        copyBtn.addEventListener('click', () => {
+            const text = textArea.value;
+            if (text.trim()) {
+                navigator.clipboard.writeText(text);
+                showToast();
+            } else {
+                alert('Por favor, ingresa un texto para copiar');
+            }
+        });
+
+        function createListItem(text) {
+            const li = document.createElement('li');
+            li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+
+            const span = document.createElement('span');
+            span.textContent = text;
+            li.appendChild(span);
+
+            // Agregar evento de clic para copiar el texto del elemento
+            li.addEventListener('click', (e) => {
+                if (e.target !== deleteBtn) { // Verificar si el clic fue en el botón "delete"
+                    navigator.clipboard.writeText(text);
+                    showToast();
+                }
+            });
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.classList.add('btn', 'btn-danger', 'ms-2');
+            deleteBtn.innerHTML = '<i class="material-icons">delete</i>';
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Detener la propagación del evento de clic
+                li.remove();
+                saveData(); // Guardar los datos en el localStorage
+            });
+
+            li.appendChild(deleteBtn);
+            return li;
+        }
+
+
+        function addItemToList() {
+            const text = textArea.value;
+            if (text.trim()) {
+                const li = createListItem(text);
+                list.appendChild(li);
+                textArea.value = '';
+                saveData(); // Guardar los datos en el localStorage
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                addItemToList();
+            }
+        });
+
+        loadData(); // Cargar los datos almacenados en el localStorage
+
+
+    </script>
+</body>
+</html>
