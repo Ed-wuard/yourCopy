@@ -31,6 +31,29 @@
         </ul>
     </div>
 
+    <!-- Modal de Bootstrap -->
+    <div class="modal fade" id="howToUseModal" tabindex="-1" aria-labelledby="howToUseModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="howToUseModalLabel">Cómo usar YourCopy</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>1. Escribe o pega el texto que deseas guardar en el área de texto.</p>
+                    <p>2. Haz clic en el botón "Copiar" para copiar el texto al portapapeles o usa el menú contextual (clic
+                        derecho) para pegar desde el portapapeles.</p>
+                    <p>3. Presiona "Enter" para agregar el texto a la lista de elementos guardados.</p>
+                    <p>4. Haz clic en cualquier elemento de la lista para copiarlo al portapapeles.</p>
+                    <p>5. Elimina elementos de la lista haciendo clic en el botón "delete" junto a cada elemento.</p>
+                    <p class="fst-italic"><b>Nota:</b> puedes pegar el texto que tengas copiado en tu portapapeles en el área de texto pulsando el boton derecho del mouse.</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Toast de Bootstrap -->
     <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 11">
         <div id="copyToast" class="toast hide text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
@@ -51,6 +74,12 @@
         const textArea = document.getElementById('textArea');
         const copyBtn = document.getElementById('copyBtn');
         const list = document.getElementById('list');
+
+        window.addEventListener('load', () => {
+            const howToUseModal = new bootstrap.Modal(document.getElementById('howToUseModal'));
+            howToUseModal.show();
+        });
+
 
         textArea.addEventListener('contextmenu', async (e) => {
             e.preventDefault(); // Evitar que se muestre el menú contextual predeterminado
