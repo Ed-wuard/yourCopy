@@ -1,0 +1,16 @@
+.btn-floating {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.btn-floating i {
+    line-height: 56px;
+    font-size: 1.8rem;
+}

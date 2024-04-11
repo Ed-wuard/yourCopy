@@ -12,6 +12,8 @@
     <!-- Material Design Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <link rel="stylesheet" href="main.css">
+
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="./assets//apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./assets//favicon-32x32.png">
@@ -31,23 +33,29 @@
         </ul>
     </div>
 
+    <button type="button" class="btn btn-primary btn-floating" id="helpBtn">
+        <i class="material-icons">help</i>
+    </button>
+
+
     <!-- Modal de Bootstrap -->
     <div class="modal fade" id="howToUseModal" tabindex="-1" aria-labelledby="howToUseModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="howToUseModalLabel">Cómo usar YourCopy</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title text-center w-100" id="howToUseModalLabel">Cómo usar YourCopy</h5>
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>1. Escribe o pega el texto que deseas guardar en el área de texto.</p>
-                    <p>2. Haz clic en el botón "Copiar" para copiar el texto al portapapeles o usa el menú contextual (clic
-                        derecho) para pegar desde el portapapeles.</p>
+                    <p>2. Haz clic en el botón "Copiar" para copiar el texto al portapapeles.</p>
                     <p>3. Presiona "Enter" para agregar el texto a la lista de elementos guardados.</p>
                     <p>4. Haz clic en cualquier elemento de la lista para copiarlo al portapapeles.</p>
-                    <p>5. Elimina elementos de la lista haciendo clic en el botón "delete" junto a cada elemento.</p>
+                    <p>5. Elimina elementos de la lista haciendo clic en el botón de "Eliminar" junto a cada elemento.</p>
+                </div>
+                <div class="modal-footer">
                     <p class="fst-italic"><b>Nota:</b> puedes pegar el texto que tengas copiado en tu portapapeles en el área de texto pulsando el boton derecho del mouse.</p>
-
                 </div>
             </div>
         </div>
@@ -74,12 +82,21 @@
         const textArea = document.getElementById('textArea');
         const copyBtn = document.getElementById('copyBtn');
         const list = document.getElementById('list');
+        const helpBtn = document.getElementById('helpBtn');
 
         window.addEventListener('load', () => {
-            const howToUseModal = new bootstrap.Modal(document.getElementById('howToUseModal'));
-            howToUseModal.show();
-        });
+            const hasSeenModal = localStorage.getItem('hasSeenModal');
 
+            if (hasSeenModal !== 'true') {
+                const howToUseModal = new bootstrap.Modal(document.getElementById('howToUseModal'));
+                howToUseModal.show();
+
+                const howToUseModalElement = document.getElementById('howToUseModal');
+                howToUseModalElement.addEventListener('hidden.bs.modal', () => {
+                    localStorage.setItem('hasSeenModal', 'true');
+                });
+            }
+        });
 
         textArea.addEventListener('contextmenu', async (e) => {
             e.preventDefault(); // Evitar que se muestre el menú contextual predeterminado
@@ -175,6 +192,11 @@
             }
         });
 
+        helpBtn.addEventListener('click', () => {
+            const howToUseModal = new bootstrap.Modal(document.getElementById('howToUseModal'));
+            howToUseModal.show();
+        });
+    
         loadData(); // Cargar los datos almacenados en el localStorage
 
 
