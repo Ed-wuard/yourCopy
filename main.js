@@ -1,7 +1,13 @@
 const textArea = document.getElementById('textArea');
-const copyBtn = document.getElementById('copyBtn');
 const list = document.getElementById('list');
 const helpBtn = document.getElementById('helpBtn');
+const autoCopySwitch = document.getElementById('autoCopySwitch');
+const clearBtn = document.getElementById('clearBtn');
+
+clearBtn.addEventListener('click', () => {
+    textArea.value = '';
+});
+
 
 window.addEventListener('load', () => {
     const hasSeenModal = localStorage.getItem('hasSeenModal');
@@ -54,16 +60,6 @@ function saveData() {
     localStorage.setItem('listData', JSON.stringify(listItems));
 }
 
-copyBtn.addEventListener('click', () => {
-    const text = textArea.value;
-    if (text.trim()) {
-        navigator.clipboard.writeText(text);
-        showToast();
-    } else {
-        alert('Por favor, ingresa un texto para copiar');
-    }
-});
-
 function createListItem(text) {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
@@ -101,6 +97,11 @@ function addItemToList() {
         list.appendChild(li);
         textArea.value = '';
         saveData(); // Guardar los datos en el localStorage
+
+        if (autoCopySwitch.checked) {
+            navigator.clipboard.writeText(text);
+            showToast();
+        }
     }
 }
 
