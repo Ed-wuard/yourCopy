@@ -8,9 +8,11 @@ clearBtn.addEventListener('click', () => {
     textArea.value = '';
 });
 
-
 window.addEventListener('load', () => {
     const hasSeenModal = localStorage.getItem('hasSeenModal');
+    const autoCopySwitchState = localStorage.getItem('autoCopySwitch') === 'true';
+
+    autoCopySwitch.checked = autoCopySwitchState;
 
     if (hasSeenModal !== 'true') {
         const howToUseModal = new bootstrap.Modal(document.getElementById('howToUseModal'));
@@ -40,7 +42,6 @@ textArea.addEventListener('contextmenu', async (e) => {
         console.error('Error al acceder al portapapeles:', error);
     }
 });
-
 
 function showToast() {
     const toast = new bootstrap.Toast(document.getElementById('copyToast'));
@@ -104,6 +105,10 @@ function addItemToList() {
         }
     }
 }
+
+autoCopySwitch.addEventListener('change', () => {
+    localStorage.setItem('autoCopySwitch', autoCopySwitch.checked);
+});
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
