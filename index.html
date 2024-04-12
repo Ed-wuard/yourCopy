@@ -24,9 +24,18 @@
 <body style="font-family: 'Nunito', sans-serif;">
     <div class="container my-5">
         <h1 class="text-center mb-4">Copiar Frases, Palabras y Código</h1>
+        <div class="d-flex justify-content-center mb-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="autoCopySwitch" checked>
+                <label class="form-check-label" for="autoCopySwitch">Copiar texto al agregar a la lista</label>
+            </div>
+        </div>
         <div class="input-group mb-3">
             <textarea class="form-control" id="textArea" rows="5"></textarea>
-            <button class="btn btn-primary px-4" type="button" id="copyBtn"><i class="material-icons">content_copy</i></button>
+            <button type="button" class="btn btn-secondary btn-clear ms-2" id="clearBtn">
+                <i class="material-icons">clear</i>
+            </button>
+
         </div>
         <ul class="list-group" id="list">
             <!-- Aquí se agregarán los elementos dinámicamente -->
