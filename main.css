@@ -1,7 +1,5 @@
 .btn-floating {
     position: fixed;
-    bottom: 2rem;
-    right: 2rem;
     border-radius: 50%;
     width: 56px;
     height: 56px;
@@ -13,4 +11,26 @@
 .btn-floating i {
     line-height: 56px;
     font-size: 1.8rem;
+}
+
+#menu-toggle {
+    bottom: 2rem;
+    left: 2rem;
+    background-color: white;
+    color: black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#menu-toggle:hover {
+    background-color: white;
+    color: black;
+}
+
+#menu-toggle:focus {
+    box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.1);
+}
+
+#helpBtn {
+    bottom: 2rem;
+    right: 2rem;
 }
