@@ -34,3 +34,9 @@
     bottom: 2rem;
     right: 2rem;
 }
+
+#list {
+    max-height: 250px;
+    /* Ajusta este valor según la altura de tus elementos de lista */
+    overflow-y: auto;
+}

@@ -83,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadData() {
         const storedData = JSON.parse(localStorage.getItem('listData')) || [];
         storedData.forEach((text) => {
-            console.log(text);
             const li = createListItem(text);
             list.appendChild(li);
         });
